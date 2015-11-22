@@ -40,7 +40,6 @@ static char **fixed_set_params = NULL;
 
 static int camera_device_open(const hw_module_t *module, const char *name,
                 hw_device_t **device);
-static int camera_device_close(hw_device_t *device);
 static int camera_get_number_of_cameras(void);
 static int camera_get_camera_info(int camera_id, struct camera_info *info);
 
@@ -65,8 +64,8 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     .set_callbacks = NULL, /* remove compilation warnings */
     .get_vendor_tag_ops = NULL, /* remove compilation warnings */
     .open_legacy = NULL, /* remove compilation warnings */
-    .set_torch_mode = NULL,
-    .init = NULL,
+    .set_torch_mode = NULL, /* remove compilation warnings */
+    .init = NULL, /* remove compilation warnings */
     .reserved = {0}, /* remove compilation warnings */
 };
 
@@ -103,8 +102,7 @@ static int check_vendor_module()
 
 const static char * iso_values[] = {"auto,ISO_HJR,ISO100,ISO200,ISO400,ISO800,ISO1600,auto"};
 
-static char *camera_fixup_getparams(int __attribute__((unused)) id,
-    const char *settings)
+static char *camera_fixup_getparams(int id, const char *settings)
 {
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
@@ -147,6 +145,9 @@ static char *camera_fixup_getparams(int __attribute__((unused)) id,
 
 static char *camera_fixup_setparams(int id, const char *settings)
 {
+    bool videoMode = false;
+    bool hdrMode = false;
+
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
 
@@ -163,6 +164,24 @@ static char *camera_fixup_setparams(int id, const char *settings)
         params.set(android::CameraParameters::KEY_ZSL, android::CameraParameters::ZSL_OFF);
     } else {
         params.set(android::CameraParameters::KEY_ZSL, android::CameraParameters::ZSL_ON);
+    }
+
+    if (params.get(android::CameraParameters::KEY_RECORDING_HINT)) {
+    videoMode = !strcmp(params.get(android::CameraParameters::KEY_RECORDING_HINT), "true");
+    }
+
+     if (params.get(android::CameraParameters::KEY_SCENE_MODE)) {
+        hdrMode = (!strcmp(params.get(android::CameraParameters::KEY_SCENE_MODE), "hdr"));
+    }
+
+    /* Disable ZSL and HDR snapshots in video mode */
+    if (videoMode) {
+        params.set("zsl", "off");
+        if (hdrMode) {
+            params.set(android::CameraParameters::KEY_SCENE_MODE, "auto");
+        }
+    } else {
+        params.set("zsl", "on");
     }
 
     // fix params here
@@ -582,7 +601,7 @@ static int camera_device_open(const hw_module_t *module, const char *name,
         memset(camera_ops, 0, sizeof(*camera_ops));
 
         camera_device->base.common.tag = HARDWARE_DEVICE_TAG;
-        camera_device->base.common.version = CAMERA_DEVICE_API_VERSION_1_0;
+        camera_device->base.common.version = HARDWARE_DEVICE_API_VERSION(1, 0);
         camera_device->base.common.module = (hw_module_t *)(module);
         camera_device->base.common.close = camera_device_close;
         camera_device->base.ops = camera_ops;

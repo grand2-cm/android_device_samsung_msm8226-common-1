@@ -148,7 +148,7 @@
                   Wifi interfaces.  If the device doesn't want to support tethering over Wifi this
          should be empty.  An example would be "softap.*" -->
     <string-array translatable="false" name="config_tether_wifi_regexs">
-        <item>"wlan\\d"</item>
+        <item>"wlan0"</item>
     </string-array>
 
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
@@ -191,6 +191,9 @@
 
     <!-- Indicate whether the SD card is accessible without removing the battery. -->
     <bool name="config_batterySdCardAccessibility">true</bool>
+
+    <!-- Boolean indicating whether Softap requires reloading AP firmware -->
+    <!-- <bool name="config_wifiApFirmwareReload">false</bool> -->
 
     <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
     <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
@@ -241,6 +244,10 @@
     <!-- The restoring is handled by modem if it is true-->
     <bool name="skip_restoring_network_selection">true</bool>
 
+    <!-- Performance profiles -->
+    <!-- <string name="config_perf_profile_prop">sys.perf.profile</string> -->
+    <!-- <string name="config_perf_profile_default_entry">1</string> -->
+
     <!-- Maximum number of supported users -->
     <integer name="config_multiuserMaximumUsers">4</integer>
 
@@ -256,7 +263,6 @@
          proportionally to the smaller buckets. -1 keeps the default. -->
     <integer name="config_lowMemoryKillerMinFreeKbytesAbsolute">122880</integer>
 
-    <!-- enable doze powersaving mode -->
+    <!-- Enable doze powersaving -->
     <bool name="config_enableAutoPowerModes">true</bool>
-
 </resources>

@@ -47,7 +47,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    frameworks/native/data/etc/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml
+    frameworks/native/data/etc/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml \
+    frameworks/native/data/etc/android.software.midi.xml:system/etc/permissions/android.software.midi.xml
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
@@ -84,6 +85,7 @@ PRODUCT_COPY_FILES += \
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8226 \
+    libboringssl-compat \
     libstlport \
     libxml2
 
@@ -210,6 +212,10 @@ PRODUCT_PACKAGES += \
 # SamsungServiceMode
 PRODUCT_PACKAGES += \
     SamsungServiceMode
+
+# Samsung symbols
+PRODUCT_PACKAGES += \
+    libsamsung_symbols
 
 # Thermal
 PRODUCT_COPY_FILES += \

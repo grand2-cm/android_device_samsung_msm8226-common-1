@@ -25,7 +25,7 @@ TARGET_BOARD_PLATFORM := msm8226
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
 
 # Kernel
-BOARD_KERNEL_CMDLINE := console=null androidboot.console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37
+BOARD_KERNEL_CMDLINE := console=null androidboot.console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
@@ -38,6 +38,7 @@ TARGET_CPU_VARIANT := krait
 AUDIO_FEATURE_ENABLED_LOW_LATENCY_CAPTURE := true
 AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
 BOARD_USES_ALSA_AUDIO := true
+USE_CUSTOM_AUDIO_POLICY := 1
 
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
@@ -50,9 +51,10 @@ QCOM_BT_USE_SMD_TTY := true
 TARGET_BOOTLOADER_BOARD_NAME := MSM8226
 
 # Camera
-TARGET_USE_COMPAT_GRALLOC_PERFORM := true
+BOARD_USES_LEGACY_MMAP := true
 TARGET_PROVIDES_CAMERA_HAL := true
 USE_DEVICE_SPECIFIC_CAMERA := true
+COMMON_GLOBAL_CFLAGS += -DCAMERA_VENDOR_L_COMPAT
 
 # Charger
 #BOARD_BATTERY_DEVICE_NAME := "battery"
@@ -77,6 +79,9 @@ TARGET_HW_DISK_ENCRYPTION := true
 # FM
 #AUDIO_FEATURE_ENABLED_FM := true
 #TARGET_QCOM_NO_FM_FIRMWARE := true
+
+# Keymaster
+#TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
